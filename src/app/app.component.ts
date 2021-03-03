@@ -36,8 +36,9 @@ export class AppComponent {
     map((statistics) => {
       // Mutate ids only for new arrived data
       const ids = (this.form.value.ids || '').split(',');
+      const arrayLength = statistics.length;
       return statistics.map((stat, index) => {
-        const newId = ids[index];
+        const newId = ids[arrayLength - index - 1];
         if (!!newId) {
           stat.id = newId.trim();
         }
