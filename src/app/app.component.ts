@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { StatisticDto } from './models/dtos/statistic.dto';
-import { generateStatisticDto } from './utils/common';
 import { Statistic } from './models/statistic';
 import { plainToClass } from 'class-transformer';
 import { StatisticChild } from './models/statistic-child';
@@ -11,25 +9,35 @@ import { StatisticChild } from './models/statistic-child';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  public statistics: Statistic[];
-
-  public statisticsData: StatisticDto[] = [
-    generateStatisticDto(),
-    generateStatisticDto(),
-    generateStatisticDto(),
-    generateStatisticDto(),
-    generateStatisticDto(),
-    generateStatisticDto(),
-  ];
+  public statistics: Statistic[] = [];
 
   constructor() {
-    this.statistics = this.statisticsData.map((dto) => {
-      const statisticChild = plainToClass(StatisticChild, dto.child); // to convert user plain object a single user. also supports arrays
-      const statistic = plainToClass(Statistic, dto); // to convert user plain object a single user. also supports arrays
-      statistic.child = statisticChild;
-      console.log({ statistic });
-      return statistic;
-    });
+    if (typeof Worker !== 'undefined') {
+      // Create a new
+      const worker = new Worker('./app.worker', { type: 'module' });
+      worker.onmessage = ({ data }) => {
+        if (data.command === 'new-items') {
+          const dtoItems = data.payload;
+          const last10Items = dtoItems.slice(Math.max(dtoItems.length - 10, 1));
+
+          this.statistics = last10Items.map((dto) => {
+            const statisticChild = plainToClass(StatisticChild, dto.child);
+            const statistic = plainToClass(Statistic, dto);
+            statistic.child = statisticChild;
+            return statistic;
+          });
+        }
+      };
+      worker.postMessage({
+        command: 'set-settings',
+        payload: {
+          delay: 100,
+          arraySize: 1000,
+        },
+      });
+    } else {
+      alert('Web Workers are not supported in this environment');
+    }
   }
 
   /** Track By Statistic item */
