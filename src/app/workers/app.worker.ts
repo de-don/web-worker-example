@@ -3,11 +3,11 @@
 import { Subject, timer } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 
-import { generateStatisticDto } from './utils/common';
-import { CommunicationMessage } from './models/communication-message';
-import { StatisticDto } from './models/dtos/statistic.dto';
-import { WorkerConfiguration } from './models/worker-configuration';
-import { CommunicationCommand } from './enums/communication-command';
+import { generateStatisticDto } from '../utils/common';
+import { CommunicationMessage } from '../models/communication-message';
+import { StatisticDto } from '../models/dtos/statistic.dto';
+import { WorkerConfiguration } from '../models/worker-configuration';
+import { CommunicationCommand } from '../enums/communication-command';
 
 /** Steam with messages from client */
 const messages$ = new Subject<CommunicationMessage<unknown>>();
@@ -29,6 +29,7 @@ const fakeSocketStream$ = configuration$.pipe(
 );
 
 addEventListener('message', ({ data }) => {
+  console.log({ data });
   if (data.command && data.payload) {
     messages$.next(data);
   }
