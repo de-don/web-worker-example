@@ -1,27 +1,26 @@
 /// <reference lib="webworker" />
 
 import { generateStatisticDto } from './utils/common';
-import { of, Subject, timer } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 import { filter, map, pluck, switchMap } from 'rxjs/operators';
 import { CommunicationMessage } from './models/communication-message';
 import { StatisticDto } from './models/dtos/statistic.dto';
 import { WorkerConfiguration } from './models/worker-configuration';
 
 /** Steam with messages from client */
-const messages$ = new Subject<CommunicationMessage<any>>();
+const messages$ = new Subject<CommunicationMessage<unknown>>();
 
 /** Steam with current configuration */
 const configuration$ = messages$.pipe(
   filter(data => data.command === 'set-settings'),
-  map(data => data as CommunicationMessage<WorkerConfiguration>),
-  pluck('payload'),
+  map(data => data.payload as WorkerConfiguration),
 );
 
 const fakeSocketStream$ = configuration$.pipe(
   switchMap(({ delay, arraySize }) => {
     return timer(0, delay).pipe(
       map(() => {
-        return Array.apply(null, Array(arraySize)).map(() => generateStatisticDto());
+        return new Array(arraySize).fill(0).map(() => generateStatisticDto());
       }),
     );
   }),

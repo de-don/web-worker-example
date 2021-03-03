@@ -1,9 +1,13 @@
+.controls {
+  padding: 10px;
+}
+
 .table {
   border: 1px solid black;
 }
 
-.statistic-table {
-  width: 600px;
+.statistic-table th {
+  width: 100px;
 }
 
 .child-table {
