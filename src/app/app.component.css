@@ -1,15 +1,8 @@
 .controls {
   padding: 10px;
+  display: flex;
 }
 
-.table {
-  border: 1px solid black;
-}
-
-.statistic-table th {
-  width: 100px;
-}
-
-.child-table {
-  width: 100%;
+.controls > label + label {
+  margin-left: 10px;
 }

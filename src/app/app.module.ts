@@ -5,10 +5,16 @@ import 'reflect-metadata';
 
 import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { StatisticRowComponent } from './components/statistic-row/statistic-row.component';
+import { StatisticTableComponent } from './components/statistic-table/statistic-table.component';
+import { StatisticChildTableComponent } from './components/statistic-child-table/statistic-child-table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    StatisticRowComponent,
+    StatisticTableComponent,
+    StatisticChildTableComponent,
   ],
   imports: [
     BrowserModule,

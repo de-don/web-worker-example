@@ -1,18 +1,20 @@
-import { Component } from '@angular/core';
-import { Statistic } from './models/statistic';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { plainToClass } from 'class-transformer';
-import { StatisticChild } from './models/statistic-child';
-import { CommunicationMessage } from './models/communication-message';
-import { StatisticDto } from './models/dtos/statistic.dto';
-import { WorkerConfiguration } from './models/worker-configuration';
 import { FormBuilder, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+
+import { Statistic } from './models/statistic';
+import { CommunicationMessage } from './models/communication-message';
+import { StatisticDto } from './models/dtos/statistic.dto';
+import { WorkerConfiguration } from './models/worker-configuration';
+import { CommunicationCommand } from './enums/communication-command';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   /** Form for configuring */
@@ -27,7 +29,7 @@ export class AppComponent {
 
   /** List of statistics */
   public statistics$ = this.workerMessages$.pipe(
-    filter(message => message.command === 'new-items'),
+    filter(message => message.command === CommunicationCommand.NewItems),
     map((message: CommunicationMessage<StatisticDto[]>) => this.handleNewItemsMessage(message)),
   );
 
@@ -53,19 +55,13 @@ export class AppComponent {
       this.workerMessages$.next(data as CommunicationMessage<any>);
     };
 
-    // TODO(Dontsov): Unsubscribe
     this.configuration$.subscribe((config) => {
       const settingsMessage: CommunicationMessage<WorkerConfiguration> = {
-        command: 'set-settings',
+        command: CommunicationCommand.SetConfig,
         payload: config,
       };
       worker.postMessage(settingsMessage);
     });
-  }
-
-  /** Track By Statistic item */
-  public trackByStatistic(index: number, stat: Statistic): string {
-    return stat.id;
   }
 
   /** Track By Statistic item */
@@ -84,12 +80,6 @@ export class AppComponent {
       return stat;
     });
 
-    return mutatedItems.map((dto) => {
-      // TODO(Dontsov): Optimize
-      const statisticChild = plainToClass(StatisticChild, dto.child);
-      const statistic = plainToClass(Statistic, dto);
-      statistic.child = statisticChild;
-      return statistic;
-    });
+    return plainToClass(Statistic, mutatedItems);
   }
 }

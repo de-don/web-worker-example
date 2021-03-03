@@ -1,3 +1,5 @@
+import { Type } from 'class-transformer';
+
 import { StatisticChild } from './statistic-child';
 
 /**
@@ -17,5 +19,6 @@ export class Statistic {
   public color: string;
 
   /** Statistic items */
+  @Type(() => StatisticChild)
   public child: StatisticChild;
 }

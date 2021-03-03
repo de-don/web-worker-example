@@ -18,50 +18,12 @@
   </label>
 
   <label>
-    Additional ids
+    Additional ids (split by ",")
     <input
       formControlName="ids"
       type="text">
   </label>
 </form>
 
-
-<table class="table statistic-table">
-  <thead>
-  <tr>
-    <th>id</th>
-    <th>int</th>
-    <th>float</th>
-    <th>color</th>
-    <th>child</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let statistic of statistics$|async; trackBy: trackByStatistic">
-    <td>{{statistic.id}}</td>
-    <td>{{statistic.int}}</td>
-    <td>{{statistic.float}}</td>
-    <td [style.backgroundColor]="statistic.color">{{statistic.color}}</td>
-    <td>
-      <table class="table child-table">
-        <thead>
-        <tr>
-          <th>id</th>
-          <th>color</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>
-            {{ statistic.child.id }}
-          </td>
-          <td [style.backgroundColor]="statistic.child.color">
-            {{ statistic.child.color }}
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </td>
-  </tr>
-  </tbody>
-</table>
+<app-statistic-table [statistics]="statistics$|async">
+</app-statistic-table>

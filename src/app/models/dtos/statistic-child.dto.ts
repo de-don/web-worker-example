@@ -1,4 +1,6 @@
-/** Statistic Item DTO */
+/**
+ * Statistic Item DTO
+ */
 export interface StatisticChildDto {
   /** Id */
   id: string;

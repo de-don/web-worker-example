@@ -1,0 +1,18 @@
+<table class="table child-table">
+  <thead>
+  <tr>
+    <th>id</th>
+    <th>color</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+      {{ child.id }}
+    </td>
+    <td [style.backgroundColor]="child.color">
+      {{ child.color }}
+    </td>
+  </tr>
+  </tbody>
+</table>

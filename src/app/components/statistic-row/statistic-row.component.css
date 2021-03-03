@@ -1,0 +1,7 @@
+:host {
+  display: table-row;
+}
+
+.statistic-table th {
+  width: 100px;
+}

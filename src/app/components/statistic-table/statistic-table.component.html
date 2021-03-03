@@ -1,0 +1,17 @@
+<table class="table statistic-table">
+  <thead>
+  <tr>
+    <th>id</th>
+    <th>int</th>
+    <th>float</th>
+    <th>color</th>
+    <th>child</th>
+  </tr>
+  </thead>
+  <tbody>
+  <app-statistic-row
+    *ngFor="let stat of statistics; trackBy: trackByStatistic"
+    [statistic]="stat">
+  </app-statistic-row>
+  </tbody>
+</table>

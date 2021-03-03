@@ -1,18 +1,20 @@
 /// <reference lib="webworker" />
 
-import { generateStatisticDto } from './utils/common';
 import { Subject, timer } from 'rxjs';
-import { filter, map, pluck, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
+
+import { generateStatisticDto } from './utils/common';
 import { CommunicationMessage } from './models/communication-message';
 import { StatisticDto } from './models/dtos/statistic.dto';
 import { WorkerConfiguration } from './models/worker-configuration';
+import { CommunicationCommand } from './enums/communication-command';
 
 /** Steam with messages from client */
 const messages$ = new Subject<CommunicationMessage<unknown>>();
 
 /** Steam with current configuration */
 const configuration$ = messages$.pipe(
-  filter(data => data.command === 'set-settings'),
+  filter(data => data.command === CommunicationCommand.SetConfig),
   map(data => data.payload as WorkerConfiguration),
 );
 
@@ -34,7 +36,7 @@ addEventListener('message', ({ data }) => {
 
 fakeSocketStream$.subscribe((items: StatisticDto[]) => {
   const message: CommunicationMessage<StatisticDto[]> = {
-    command: 'new-items',
+    command: CommunicationCommand.NewItems,
     payload: items,
   };
   postMessage(message);

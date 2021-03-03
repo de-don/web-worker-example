@@ -1,0 +1,16 @@
+<td>
+  {{statistic.id}}
+</td>
+<td>
+  {{statistic.int}}
+</td>
+<td>
+  {{statistic.float}}
+</td>
+<td [style.backgroundColor]="statistic.color">
+  {{statistic.color}}
+</td>
+<td>
+  <app-statistic-child-table [child]="statistic.child">
+  </app-statistic-child-table>
+</td>
