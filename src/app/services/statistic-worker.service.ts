@@ -44,14 +44,22 @@ export class StatisticWorkerService extends StatisticService {
 
   /** Set new configuration for statistic generation */
   public setConfiguration(config: StatisticConfiguration): void {
+    const settingsMessage: CommunicationMessage<StatisticConfiguration> = {
+      command: CommunicationCommand.SetConfig,
+      payload: config,
+    };
+
+    this.runWhenWorkerReady((worker) => {
+      worker.postMessage(settingsMessage);
+    });
+  }
+
+  /** Run callback function when worker ready */
+  private runWhenWorkerReady(callback: (worker: Worker) => void): void {
     this.worker$.pipe(
       first(),
     ).subscribe((worker) => {
-      const settingsMessage: CommunicationMessage<StatisticConfiguration> = {
-        command: CommunicationCommand.SetConfig,
-        payload: config,
-      };
-      worker.postMessage(settingsMessage);
+      callback(worker);
     });
   }
 
