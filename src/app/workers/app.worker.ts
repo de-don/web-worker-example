@@ -6,7 +6,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 import { generateStatisticDto } from '../utils/common';
 import { CommunicationMessage } from '../models/communication-message';
 import { StatisticDto } from '../models/dtos/statistic.dto';
-import { WorkerConfiguration } from '../models/worker-configuration';
+import { StatisticConfiguration } from '../models/statistic-configuration';
 import { CommunicationCommand } from '../enums/communication-command';
 
 /** Steam with messages from client */
@@ -15,7 +15,7 @@ const messages$ = new Subject<CommunicationMessage<unknown>>();
 /** Steam with current configuration */
 const configuration$ = messages$.pipe(
   filter(data => data.command === CommunicationCommand.SetConfig),
-  map(data => data.payload as WorkerConfiguration),
+  map(data => data.payload as StatisticConfiguration),
 );
 
 const fakeSocketStream$ = configuration$.pipe(

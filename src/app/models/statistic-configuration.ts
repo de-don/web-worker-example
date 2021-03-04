@@ -1,7 +1,7 @@
 /**
- * Configuration for worker
+ * Configuration for statistic
  */
-export interface WorkerConfiguration {
+export interface StatisticConfiguration {
   /** Delay between messages */
   delay: number;
 
