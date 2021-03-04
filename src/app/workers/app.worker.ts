@@ -29,7 +29,6 @@ const fakeSocketStream$ = configuration$.pipe(
 );
 
 addEventListener('message', ({ data }) => {
-  console.log({ data });
   if (data.command && data.payload) {
     messages$.next(data);
   }
